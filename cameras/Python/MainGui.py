@@ -133,7 +133,7 @@ class MainWindow(mw_Base, mw_Ui):
         self.imageView.ui.menuBtn.hide()  # Hide the menu button (if available)
 
         view = self.imageView.getView()
-        view.setRange(xRange=(0, 1280), yRange=(0,1280), padding=0)
+        view.setRange(xRange=(0, self.image_w), yRange=(0,self.image_h), padding=0)
         view.setBackgroundColor('w')
 
         # Ellipse
@@ -304,6 +304,14 @@ class MainWindow(mw_Base, mw_Ui):
         # Save image
         if self.continuousFlag:
             self.saveImage()
+        view = self.imageView.getView()
+        current_x_range = view.viewRange()[0]
+        if current_x_range[1] > self.image_w:
+            view.setXRange(0, self.image_w, padding=0)
+
+        current_y_range = view.viewRange()[1]
+        if current_y_range[1] > self.image_h:
+            view.setYRange(0, self.image_h, padding=0)
 
         # Show new image (use transpose as pyqtgraph plots [xaxis, yaxis] and numpy plots [yaxis, xaxis])
         self.imageView.setImage(self.image.T, autoLevels=False, levels=(0,255), autoRange=False) 
